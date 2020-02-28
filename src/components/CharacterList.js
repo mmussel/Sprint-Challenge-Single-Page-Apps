@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
-import CharacterCard from './CharacterCard'
+import styled from 'styled-components';
+
+import CharacterCard from './CharacterCard';
+import SearchForm from './SearchForm';
+
+const Body = styled.div`
+margin: 0 auto;
+`;
 
 function CharacterList() {
   const [characters, setCharacters] = useState([]);
@@ -9,31 +16,34 @@ function CharacterList() {
     Axios
       .get('https://cors-anywhere.herokuapp.com/https://rickandmortyapi.com/api/character/')
       .then(response => {
-        console.log(response.results);
-        setCharacters(response.results);
+        setCharacters(response.data.results);
       })
       .catch(error => {
         console.log('Error:', error);
       });
+
     // TODO: Add API Request here - must run in `useEffect`
     //  Important: verify the 2nd `useEffect` parameter: the dependancies array!
   }, []);
 
   return (
-    <section className="character-list">
-      {characters.map((character, index) => {
-        return (
-          <CharacterCard
-            key={index}
-            name={character.name}
-            status={character.status}
-            species={character.species}
-            gender={character.gender}
-          />
-        );
-      })};
+    <section className='character-list'>
+      <Body>
+        <SearchForm />
+          {characters.map((character, index) => {
+              return (
+                <CharacterCard
+                  key={index}
+                  name={character.name}
+                  status={character.status}
+                  species={character.species}
+                  gender={character.gender}
+                />
+              );
+          })};
+      </Body>
     </section>
   );
 }
 
-export default CharacterList
+export default CharacterList;
